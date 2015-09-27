@@ -1,0 +1,8 @@
+[package]
+name = "my_dubious_uniform_resource_locator_shortener"
+version = "0.0.1"
+authors = ["Zack M. Davis <code@zackmdavis.net>"]
+
+[dependencies]
+iron = "0.2.2"
+
