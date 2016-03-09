@@ -1,8 +1,27 @@
+#![feature(custom_derive, custom_attribute, plugin)]
+#![plugin(diesel_codegen)]
+
+#[macro_use] extern crate diesel;
 extern crate pencil;
 extern crate hyper;
 
+pub mod schema;
+pub mod models;
+
+use std::env;
+use diesel::prelude::*;
+use diesel::sqlite::SqliteConnection;
 use pencil::{Pencil, Request, Response, PencilResult};
 use hyper::header::Headers;
+
+
+fn establish_database_connection() -> SqliteConnection {
+     let our_database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    SqliteConnection::establish(&our_database_url)
+        .expect(&format!("Regrettably, an error whlie attempting \
+                          to connect to {}", our_database_url))
+}
 
 
 fn uniformly_locate_resource(_our_client_request: &mut Request) -> PencilResult {

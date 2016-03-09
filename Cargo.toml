@@ -4,5 +4,7 @@ version = "0.0.1"
 authors = ["Zack M. Davis <code@zackmdavis.net>"]
 
 [dependencies]
-pencil = "0.1.0"
+diesel = "0.5"
+diesel_codegen = { version = "0.5", default-features = false, features = ["nightly", "sqlite"] }
 hyper = "0.7"
+pencil = "0.1"
