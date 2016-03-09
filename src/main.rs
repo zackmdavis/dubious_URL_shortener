@@ -1,15 +1,24 @@
-extern crate iron;
+extern crate pencil;
+extern crate hyper;
 
-use iron::prelude::*;
-use iron::status;
-use iron::modifiers::Redirect;
-use iron::Url;
+use pencil::{Pencil, Request, Response, PencilResult};
+use hyper::header::Headers;
+
+
+fn uniformly_locate_resource(_our_client_request: &mut Request) -> PencilResult {
+    let mut our_server_response = Response::new_empty();
+    our_server_response.status_code = 302;
+    let mut our_headers = Headers::new();
+    our_headers.set_raw("Location", vec![
+        b"https://github.com/fengsp/pencil".to_vec()]);
+    our_server_response.headers = our_headers;
+    Ok(our_server_response)
+}
 
 
 fn main() {
-    Iron::new(|_req: &mut Request| {
-        let destination = Url::parse(
-            "https://github.com/rust-lang/cargo").unwrap();
-        Ok(Response::with((status::Found, Redirect(destination))))
-    }).http("localhost:64999").unwrap();
+    let mut app = Pencil::new("/");
+    app.get("/<supplied_resource_identifier>",
+            "uniformly_locate_resource", uniformly_locate_resource);
+    app.run("localhost:64999");
 }
